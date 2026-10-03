@@ -256,6 +256,7 @@ async function insert(i, fromShelf = false) {
   consoleEl.classList.remove("has-tape");
   updateNow(t);
   setProgress(0);
+  adClock = -1;
   setState("loading");
 
   if (fromShelf && narrow.matches) {
@@ -321,10 +322,25 @@ function setProgress(ratio) {
   seekEl.setAttribute("aria-valuenow", String(Math.round(pct)));
 }
 
+// Reklam: oynatıcı "başlamadı" (-1) der ama süre ilerler. O sırada YouTube'un
+// kendi ekranı açık kalır ki "Reklamı atla" tıklanabilsin.
+let adClock = -1;
+
 // Kaset sayacı (oynatılan saniye, 3 hane) ve ilerleme çubuğu.
 setInterval(() => {
-  if (!playerReady || consoleEl.dataset.state !== "playing") return;
+  if (!playerReady || current === null) return;
+  const state = consoleEl.dataset.state;
   const now = player.getCurrentTime() || 0;
+  if (state !== "playing") {
+    const ps = player.getPlayerState();
+    const moving = adClock >= 0 && now > adClock + 0.2;
+    adClock = now;
+    if (moving && ps !== YT.PlayerState.PLAYING && ps !== YT.PlayerState.PAUSED && state !== "ad") {
+      setState("ad");
+      osdEl.textContent = "REKLAM";
+    }
+    return;
+  }
   const dur = player.getDuration() || 0;
   if (dur) setProgress(now / dur);
   if (!osdTimer) osdEl.textContent = `▶ ${String(Math.floor(now)).padStart(3, "0")}`;
