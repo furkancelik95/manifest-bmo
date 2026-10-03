@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Manifest Kaset Rafı</title>
+  <meta name="description" content="Raftan bir manifest kaseti seç, BMO klibi ekranında oynatsın.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Permanent+Marker&family=Silkscreen&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <p class="eyebrow">BMO × manifest</p>
+      <h1>manifest <span>kaset rafı</span></h1>
+    </div>
+    <p class="lede">Raftan bir kaset seç. BMO kaseti takar ve klibi kendi ekranında oynatır.</p>
+  </header>
+
+  <p class="notice" id="notice" hidden>
+    Klipler YouTube'dan geliyor ve dosya doğrudan açılınca oynamıyor.
+    Klasörde <b>baslat.bat</b>'a çift tıkla ya da <code>python -m http.server 8000</code> çalıştırıp
+    <code>http://localhost:8000</code> adresini aç.
+  </p>
+
+  <main class="app">
+    <aside class="console" id="console" data-state="idle" aria-label="BMO">
+      <div class="bmo">
+        <span class="arm l"></span><span class="arm r"></span>
+        <span class="leg l"></span><span class="leg r"></span>
+
+        <div class="bmo-body">
+          <div class="screen">
+            <div class="tv">
+              <div class="tv-bar">
+                <span>BMO TV</span>
+                <span class="tv-right">
+                  <span id="osd">▶ 000</span>
+                  <button class="tv-fs" id="fsBtn" type="button" aria-label="Tam ekran" title="Tam ekran"><span></span></button>
+                </span>
+              </div>
+              <div class="tv-video">
+                <div id="yt"></div>
+                <button class="tv-cover" id="cover" type="button" aria-label="Oynat / duraklat">
+                  <span class="cover-icon"></span>
+                  <span class="cover-text">OYNATMAK İÇİN TIKLA</span>
+                </button>
+                <div class="seek" id="seek" role="slider" tabindex="-1" aria-label="Klipte ileri / geri sar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <span class="seek-fill" id="seekFill"></span>
+                </div>
+              </div>
+              <div class="tv-bar"><span class="ticker"><span id="ticker"></span></span></div>
+            </div>
+            <div class="face-layer">
+              <svg class="face" viewBox="0 0 160 110" aria-hidden="true">
+                <g class="eyes">
+                  <ellipse cx="50" cy="40" rx="6" ry="8"/>
+                  <ellipse cx="110" cy="40" rx="6" ry="8"/>
+                </g>
+                <path class="m m-smile" d="M58 64 Q80 94 102 64 Z"/>
+                <ellipse class="m m-o" cx="80" cy="74" rx="9" ry="11"/>
+                <path class="m m-sad" d="M62 84 Q80 66 98 84"/>
+              </svg>
+              <p class="face-text" id="faceText">BİR KASET SEÇ!</p>
+            </div>
+          </div>
+
+          <div class="bmo-row">
+            <div class="slot"><span class="slot-mouth"><span class="slot-tape"></span></span></div>
+            <span class="dot-blue"></span>
+          </div>
+
+          <div class="pad-row">
+            <div class="dpad">
+              <button class="d up" data-act="volup" aria-label="Sesi aç" title="Sesi aç"></button>
+              <button class="d left" data-act="prev" aria-label="Önceki kaset" title="Önceki kaset"></button>
+              <span class="d mid"></span>
+              <button class="d right" data-act="next" aria-label="Sonraki kaset" title="Sonraki kaset"></button>
+              <button class="d down" data-act="voldown" aria-label="Sesi kıs" title="Sesi kıs"></button>
+            </div>
+            <div class="btns">
+              <button class="b tri" data-act="toggle" aria-label="Oynat / duraklat" title="Oynat / duraklat"><span></span></button>
+              <button class="b green" data-act="shuffle" aria-label="Karışık bir kaset tak" title="Karışık"></button>
+              <button class="b red" data-act="eject" aria-label="Kaseti çıkar" title="Kaseti çıkar"></button>
+            </div>
+          </div>
+
+          <div class="bmo-foot"><span class="grille"><i></i><i></i></span><span class="bmo-name">BMO</span></div>
+        </div>
+      </div>
+
+      <section class="now" aria-live="polite">
+        <div class="now-tape" id="nowTape"></div>
+        <div class="now-info">
+          <p class="now-eyebrow" id="nowEyebrow">BMO boşta</p>
+          <h2 class="now-title" id="nowTitle">Kaset takılı değil</h2>
+          <p class="now-meta" id="nowMeta">Raftan bir kaset seç ya da mavi üçgenle ilk kaseti başlat.</p>
+          <a class="now-link" id="nowLink" target="_blank" rel="noopener" hidden>YouTube'da aç ↗</a>
+        </div>
+      </section>
+
+      <ul class="legend">
+        <li><kbd>←</kbd><kbd>→</kbd> kaset değiştir</li>
+        <li><kbd>↑</kbd><kbd>↓</kbd> ses</li>
+        <li><kbd>Boşluk</kbd> duraklat</li>
+        <li><kbd>Esc</kbd> çıkar</li>
+      </ul>
+    </aside>
+
+    <section class="rack" id="rack" aria-label="Kaset rafı"></section>
+  </main>
+
+  <footer class="foot">
+    <p class="credit">Created by <strong>Furkan Enes Çelik</strong></p>
+    <p>Hayran işi. Klipler manifest'in YouTube kanallarından oynar; BMO, Adventure Time'dan.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
