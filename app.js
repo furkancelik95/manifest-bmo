@@ -13,6 +13,7 @@ const TAPES = [
   { title: "Hileli", year: 2026, id: "kXKhNI4DLHM", kind: "Official Music Video", feat: "x Ajda Pekkan", shell: "#1d1b21", band: "#d4af37" },
   { title: "Toz Pembe", year: 2026, id: "0pg0raFMNIU", kind: "Official Music Video", shell: "#f4b4c5", band: "#d93a5a" },
   { title: "pVg", full: "pVg (Manifest Live Remix)", year: 2026, id: "EQQNb4iJVIk", kind: "Official Music Video", feat: "& Motive & Pango", shell: "#a3e264", band: "#ff6ad5" },
+  { title: "TRALALA", year: 2026, id: "0rW7Fbm4S7g", kind: "Official Music Video", shell: "#7b4fd6", band: "#ffe14d" },
 ];
 
 const SIDES = [
